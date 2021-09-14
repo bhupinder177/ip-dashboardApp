@@ -1,0 +1,135 @@
+$breakpoints: (
+	'xs-phone': 320px,
+	'phone': 576px,
+	'tablet': 768px,
+	'desktop': 992px,
+	'widescreen': 1200px
+);
+
+// keywords
+$media-expressions: (
+	'screen': 'screen',
+	'print': 'print',
+	'handheld': 'handheld',
+	'landscape': '(orientation: landscape)',
+	'portrait': '(orientation: portrait)',
+	'retina2x': '(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)',
+	'retina3x': '(-webkit-min-device-pixel-ratio: 2.5), (min-resolution: 240dpi)'
+);
+
+// ligatured operators ≥ ≤
+
+@import 'vendors/include-media';
+
+@import "vendors/bootstrap/functions";
+@import "vendors/bootstrap/variables";
+@import "vendors/bootstrap/mixins";
+
+@import "bootstrap-custom";
+
+@import 'base/functions';
+@import 'base/mixins';
+@import 'base/helpers';
+
+@import 'components/navigation';
+@import 'components/icomoon';
+
+@import 'layout/header';
+@import 'layout/common';
+@import 'layout/footer';
+
+/* custom scrollbars styles */
+
+.jcf-scrollable-wrapper {
+    box-sizing: content-box;
+    position: relative;
+    width: 100% !important;
+}
+
+.jcf-scrollbar-vertical {
+    position: absolute;
+    cursor: default;
+    background: transparent;
+    width: 3px;
+	bottom: 0;
+    right: 0;
+    top: 0;
+}
+
+.jcf-scrollbar-vertical .jcf-scrollbar-dec,
+.jcf-scrollbar-vertical .jcf-scrollbar-inc {
+    background: #bbb;
+    height: 1px;
+    width: 3px;
+    left: 0;
+    top: 0;
+	opacity: 0;
+	visibility: hidden;
+}
+
+.jcf-scrollbar-vertical .jcf-scrollbar-inc {
+    top: auto;
+    bottom: 0;
+}
+
+.jcf-scrollbar-vertical .jcf-scrollbar-handle {
+    background: #724D94;
+    height: 35px !important;
+    width: 3px;
+}
+
+.jcf-scrollbar-horizontal {
+    position: absolute;
+    background: transparent;
+    right: auto;
+    top: auto;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    height: 22px;
+	display: none;
+}
+
+.jcf-scrollbar-horizontal .jcf-scrollbar-dec,
+.jcf-scrollbar-horizontal .jcf-scrollbar-inc {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    background: #bbb;
+    height: 14px;
+    width: 14px;
+}
+
+.jcf-scrollbar-horizontal .jcf-scrollbar-inc {
+    left: auto;
+    right: 0;
+}
+
+.jcf-scrollbar-horizontal .jcf-scrollbar-slider {
+    display: inline-block;
+    position: relative;
+    height: 14px;
+    display: none;
+}
+
+.jcf-scrollbar-horizontal .jcf-scrollbar-handle {
+    position: absolute;
+    background: #888;
+    height: 14px;
+}
+
+.jcf-scrollbar.jcf-inactive .jcf-scrollbar-handle {
+    visibility: hidden;
+}
+
+.jcf-scrollbar.jcf-inactive .jcf-scrollbar-dec,
+.jcf-scrollbar.jcf-inactive .jcf-scrollbar-inc {
+    background: #e3e3e3;
+}
+
+.js-tab-hidden {
+    display: block !important;
+    left: -9999px !important;
+    position: absolute !important;
+    top: -9999px !important;
+}

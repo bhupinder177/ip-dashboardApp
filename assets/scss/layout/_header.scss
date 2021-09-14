@@ -1,0 +1,108 @@
+#header {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    position: fixed;
+
+    .header-holder {
+        padding: 0 61px 0 47px;
+        min-height: 116px;
+        border-radius: 14px 14px 0 0;
+        background: #FDFDFF;
+        border: 1px solid #EBEBEB;
+
+        @include media('<tablet') {
+            padding: 15px;
+            min-height: inherit;
+        }
+    }
+
+    .logo {
+        width: 54px;
+        display: block;
+
+        @include media('<tablet') {
+            width: 45px;
+        }
+
+        a {
+            display: block;
+        }
+
+        img {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+    }
+
+    .profile-holder {
+        position: relative;
+    }
+
+    .user-hold {
+        margin: 0 0 0 81px;
+        position: relative;
+
+        @include media('<desktop') {
+            margin: 0 0 0 40px;
+        }
+
+        @include media('<tablet') {
+            margin: 0;
+        }
+
+        .dropdown-menu {
+            left: -10px !important;
+            right: auto !important;
+
+            @include media('>=tablet') {
+                display: none !important;
+            }
+        }
+    }
+
+    .user {
+        margin: 0;
+        white-space: normal;
+
+        @include media('<tablet') {
+            width: 120px;
+        }
+
+        .img-box {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            margin: 0;
+            border-radius: 100%;
+
+            img {
+                display: block;
+                height: auto;
+                width: 100%;
+                border-radius: 100%;
+            }
+        }
+
+        .user-name {
+            font-size: 13px;
+            line-height: 16px;
+            font-weight: 600;
+            color: #000;
+            margin: 0 0 0 19px;
+            letter-spacing: 0.25px;
+            transition: 0.3s linear;
+
+            &:hover {
+                color: #ffde3b;
+            }
+
+            @include media('<tablet') {
+                margin: 0 0 0 5px;
+                word-break: normal;
+            }
+        }
+    }
+}

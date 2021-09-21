@@ -116,8 +116,17 @@ class Admin extends CI_Controller {
     redirect('admin');
   }
 
+  public function securite()
+  {
+    if(!isset($this->session->userdata['adminloggedin']['id']))
+    {
+      redirect('/');
+    }
+  }
+
   public function dashboard()
   {
+    $this->securite();
     // ******Open*********
     $data['opencount'] = $this->common->count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"status"=>0));
     $config = array();
@@ -179,6 +188,7 @@ class Admin extends CI_Controller {
 
   public function account()
   {
+    $this->securite();
     $data['result'] = $this->common->getrow('users',array("userId"=>$this->session->userdata['adminloggedin']['id']));
     $this->load->view('admin/header');
     $this->load->view('admin/account-details',$data);
@@ -215,6 +225,7 @@ class Admin extends CI_Controller {
 
   public function company()
   {
+    $this->securite();
     $this->load->view('admin/header');
     $this->load->view('admin/company');
 
@@ -222,6 +233,7 @@ class Admin extends CI_Controller {
 
   public function team()
   {
+    $this->securite();
     $data['pcount'] = $this->common->count_all_results('users',array("parent"=>$this->session->userdata['adminloggedin']['id']));
     $config = array();
     $config["base_url"] = base_url() . 'team-members/';
@@ -246,6 +258,7 @@ class Admin extends CI_Controller {
 
   public function actions()
   {
+    $this->securite();
     $data['pcount'] = $this->common->count_all_results('actions',array("userId"=>$this->session->userdata['adminloggedin']['id']));
     $config = array();
     $config["base_url"] = base_url() . 'actions/';
@@ -270,30 +283,47 @@ class Admin extends CI_Controller {
 
   public function submit_idea()
   {
+    $this->securite();
     $this->load->view('admin/header');
     $this->load->view('admin/submit-idea-main');
 
   }
-  public function submit_idea_details($id)
+  public function submit_idea_details($id,$subcate)
   {
-    $data['result'] = $this->common->getrow('quick',array("id"=>$id));
+      $this->securite();
+    $data['id'] = $id;
+    $data['subcate'] = $subcate;
+    if($this->session->userdata['adminloggedin']['id'])
+    {
+      $user = $this->common->getrow('users',array("userId"=>$this->session->userdata['adminloggedin']['id']));
+      if(!empty($user))
+      {
+        if($user->parent == 0)
+        {
+         $userId = $user->userId;
+        }
+        else
+        {
+          $userId = $user->parent;
+        }
+      }
+    }
+
+    $data['team'] = $this->common->get('users',array("parent"=>$userId));
     $this->load->view('admin/header');
     $this->load->view('admin/new-idea-details',$data);
-
   }
 
-  public function idea_details(){
+  public function idea_details($id){
+      $this->securite();
+      $data['result'] = $this->common->getrow('quick',array("id"=>$id));
+      $data['team'] = getteam($id);
+      $data['images'] = $this->common->get('quick_images',array("quickId"=>$id));
       $this->load->view('admin/header');
-      $this->load->view('admin/idea-details');
+      $this->load->view('admin/idea-details',$data);
   }
 
-  public function securite()
-  {
-    if(!isset($this->session->userdata['adminloggedin']['id']))
-    {
-      redirect('admin');
-    }
-  }
+
 
   public function actionSave()
   {
@@ -559,6 +589,104 @@ echo json_encode($output);
       $output['delayTime'] ='3000';
       $output['resetform'] ='true';
       $output['reload'] ='true';
+    }
+    else
+    {
+      $output['formErrors'] ="true";
+      $output['errors'] ="Team member not Added ";
+    }
+
+
+    echo json_encode($output);
+    exit;
+  }
+
+  public function SaveIdeaDetail()
+  {
+    $nowUtc = new DateTime( 'now',  new DateTimeZone( 'UTC' ) );
+    $date =  $nowUtc->format('Y-m-d');
+    $_POST['date'] = $date;
+    $team = $_POST['userId'];
+    unset($_POST['userId']);
+
+    $userId = $this->session->userdata['adminloggedin']['id'];
+     $insert = $this->common->insert('quick',array("userId"=>$userId,"idea"=>$_POST['idea'],"thinking"=>$_POST['thinking'],"category"=>$_POST['category'],"date"=>$date,"status"=>0));
+     if($insert)
+     {
+       if(!empty($team))
+       {
+         foreach($team as $t)
+         {
+           $this->common->insert('quick_assign',array("userId"=>$t,"quickId"=>$insert[1]));
+         }
+       }
+     }
+
+     if($insert)
+     {
+
+       $files = $_FILES;
+       $count = count($_FILES['image']['name']);
+
+       if($count > 0)
+       {
+       for ($i = 0; $i < $count; $i++) {
+
+
+           // $_FILES['image']['name'] = time() . $files['image']['name'][$i];
+           $_FILES['image']['name'] = preg_replace("/[^a-z0-9\_\-\.]/i", '', basename(strtolower($files['image']["name"][$i])));
+           $_FILES['image']['type'] = $files['image']['type'][$i];
+           $_FILES['image']['tmp_name'] = $files['image']['tmp_name'][$i];
+           $_FILES['image']['error'] = $files['image']['error'][$i];
+           $_FILES['image']['size'] = $files['image']['size'][$i];
+           $config['upload_path'] = 'assets/ideaimages';
+           $config['allowed_types'] = 'gif|jpg|png|jpeg';
+           $config['max_size'] = '2000';
+           $config['remove_spaces'] = true;
+           $config['overwrite'] = false;
+           $config['max_width'] = '';
+           $config['max_height'] = '';
+           $this->load->library('upload', $config);
+           $this->upload->initialize($config);
+           $this->upload->do_upload();
+
+
+           $file = $this->upload->data('file_name');
+
+           if ($this->upload->do_upload('image')) {
+               $upload_data = $this->upload->data();
+               $fileName = $upload_data['file_name'];
+               $flag = true;
+           }
+
+
+           $images[] = $fileName;
+
+     }
+
+       foreach ($images as $img) {
+           if (!empty($img)) {
+
+               $data1 = array(
+                   'quickId' =>$insert[1],
+                   'image' => $img
+               );
+
+               $insertImages = $this->common->insert('quick_images',$data1);
+           }
+       }
+
+     }
+   }
+
+     if($insert)
+    {
+      $output['success'] ="true";
+      $output['success_message'] ="Idea Sumitted Successfully";
+      $output['url'] = base_url().'dashboard';
+      $output['delayTime'] ='3000';
+      $output['resetform'] ='true';
+
     }
     else
     {

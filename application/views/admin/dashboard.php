@@ -14,9 +14,9 @@
 											<img src="<?php echo base_url(); ?>assets/images/img15.png" alt="img">
 										</div>
 									</div>
-									<span class="title-status">Pending:</span>
-									<strong class="title-number">31</strong>
-									<strong class="submit-info"><span>Submitted:</span> 15</strong>
+									<span class="title-status">Pending: </span>
+									<strong class="title-number"><?php echo $aa = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>1,'status'=>0)); ?></strong>
+									<strong class="submit-info"><span>Submitted:</span><?php echo $aaa = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>1)); ?></strong>
 								</li>
 								<li>
 									<span class="title ">Products/ <br>Technology</span>
@@ -26,8 +26,8 @@
 										</div>
 									</div>
 									<span class="title-status">Pending:</span>
-									<strong class="title-number">12</strong>
-									<strong class="submit-info"><span>Submitted:</span> 03</strong>
+									<strong class="title-number"><?php echo $a = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>2,'status'=>0)); ?></strong>
+									<strong class="submit-info"><span>Submitted:</span><?php echo $b = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>2)); ?></strong>
 								</li>
 								<li>
 									<span class="title">Process/ <br>Operations</span>
@@ -37,8 +37,8 @@
 										</div>
 									</div>
 									<span class="title-status">Pending:</span>
-									<strong class="title-number">09</strong>
-									<strong class="submit-info"><span>Submitted:</span> 01</strong>
+									<strong class="title-number"><?php echo $c = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>3,'status'=>0)); ?></strong>
+									<strong class="submit-info"><span>Submitted:</span><?php echo $d = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>3)); ?></strong>
 								</li>
 								<li>
 									<div style="margin-top: 19px;"></div>
@@ -48,9 +48,9 @@
 											<img src="<?php echo base_url(); ?>assets/images/img18.png" alt="img">
 										</div>
 									</div>
-									<span class="title-status">Pending:</span>
-									<strong class="title-number">22</strong>
-									<strong class="submit-info"><span>Submitted:</span> 17</strong>
+									<span class="title-status">Pending: </span>
+									<strong class="title-number"><?php echo $e = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>4,'status'=>0)); ?></strong>
+									<strong class="submit-info"><span>Submitted:</span><?php echo $h = count_all_results('quick',array("userId"=>$this->session->userdata['adminloggedin']['id'],"category"=>4)); ?></strong>
 								</li>
 							</ul>
 						</div>
@@ -133,21 +133,47 @@
 													{
 													?>
 											<tr>
-												<td data-title="Name" class="col1 padding-left"><a href="<?php echo base_url(); ?>idea-details/<?php echo $open->id; ?>"><?php echo $open->myname; ?></a></td>
+												<td data-title="Name" class="col1 padding-left"><a href="<?php echo base_url(); ?>idea-details/<?php echo $open->id; ?>"><?php echo $open->idea; ?></a></td>
 												<td data-title="Category" class="col2">
 													<?php if(!empty($open->category))
 													{
-														?>
-													<a class="btn bg-purple" href="#">Branding</a>
-												<?php } ?>
+														if($open->category == 1)
+														{
+															?>
+													<a class="btn bg-purple" >Branding</a>
+												<?php
+											      }
+														else if($open->category == 2)
+														{
+															?>
+													<a class="btn bg-purple" >Product & Technology</a>
+												<?php
+											      }
+														else if($open->category == 3)
+														{
+															?>
+													<a class="btn bg-purple" >Process & Operations</a>
+												<?php
+											      }
+														else if($open->category == 4)
+														{
+															?>
+													<a class="btn bg-purple" >Creative</a>
+												<?php
+											      }
+											     } ?>
 												</td>
 												<td data-title="Submission" class="col3"><?php echo date("M d Y", strtotime($open->date)); ?></td>
 												<td data-title="Team" class="col4">
-													<?php if(!empty($open->teams))
+													<?php $team = getteam($open->id); ?>
+													<?php if(!empty($team))
 													 { ?>
 													<div class="img-wrap">
+														<?php foreach($team as $t)
+														{ ?>
 														<div class="img-box" style="background-image: url(<?php echo base_url(); ?>assets/images/img3.jpg);"></div>
-														<div class="img-box" style="background-image: url(<?php echo base_url(); ?>assets/images/img4.jpg);"></div>
+
+													<?php } ?>
 													</div>
 												<?php } ?>
 												</td>
@@ -205,21 +231,47 @@
 													{
 													?>
 											<tr>
-												<td data-title="Name" class="col1 padding-left"><a href="<?php echo base_url(); ?>idea-details/<?php echo $approved->id; ?>"><?php echo $open->myname; ?></a></td>
+												<td data-title="Name" class="col1 padding-left"><a href="<?php echo base_url(); ?>idea-details/<?php echo $approved->id; ?>"><?php echo $approved->idea; ?></a></td>
 												<td data-title="Category" class="col2">
-													<?php if(!empty($approved->category))
+													<?php if(!empty($open->category))
 													{
-														?>
-													<a class="btn bg-purple" href="#">Branding</a>
-												<?php } ?>
+														if($open->category == 1)
+														{
+															?>
+													<a class="btn bg-purple" >Branding</a>
+												<?php
+														}
+														else if($open->category == 2)
+														{
+															?>
+													<a class="btn bg-purple" >Product & Technology</a>
+												<?php
+														}
+														else if($open->category == 3)
+														{
+															?>
+													<a class="btn bg-purple" >Process & Operations</a>
+												<?php
+														}
+														else if($open->category == 4)
+														{
+															?>
+													<a class="btn bg-purple" >Creative</a>
+												<?php
+														}
+													 } ?>
 												</td>
 												<td data-title="Submission" class="col3"><?php echo date("M d Y", strtotime($approved->date)); ?></td>
 												<td data-title="Team" class="col4">
-													<?php if(!empty($approved->teams))
+													<?php $team = getteam($approved->id); ?>
+													<?php if(!empty($team))
 													 { ?>
 													<div class="img-wrap">
+														<?php foreach($team as $t)
+														{ ?>
 														<div class="img-box" style="background-image: url(<?php echo base_url(); ?>assets/images/img3.jpg);"></div>
-														<div class="img-box" style="background-image: url(<?php echo base_url(); ?>assets/images/img4.jpg);"></div>
+
+													<?php } ?>
 													</div>
 												<?php } ?>
 												</td>
@@ -274,21 +326,47 @@
 													{
 													?>
 											<tr>
-												<td data-title="Name" class="col1 padding-left"><a href="<?php echo base_url(); ?>idea-details/<?php echo $apchived->id; ?>"><?php echo $open->myname; ?></a></td>
+												<td data-title="Name" class="col1 padding-left"><a href="<?php echo base_url(); ?>idea-details/<?php echo $apchived->id; ?>"><?php echo $apchived->idea; ?></a></td>
 												<td data-title="Category" class="col2">
-													<?php if(!empty($apchived->category))
+													<?php if(!empty($open->category))
 													{
-														?>
-													<a class="btn bg-purple" href="#">Branding</a>
-												<?php } ?>
+														if($open->category == 1)
+														{
+															?>
+													<a class="btn bg-purple" >Branding</a>
+												<?php
+														}
+														else if($open->category == 2)
+														{
+															?>
+													<a class="btn bg-purple" >Product & Technology</a>
+												<?php
+														}
+														else if($open->category == 3)
+														{
+															?>
+													<a class="btn bg-purple" >Process & Operations</a>
+												<?php
+														}
+														else if($open->category == 4)
+														{
+															?>
+													<a class="btn bg-purple" >Creative</a>
+												<?php
+														}
+													 } ?>
 												</td>
 												<td data-title="Submission" class="col3"><?php echo date("M d Y", strtotime($apchived->date)); ?></td>
 												<td data-title="Team" class="col4">
-													<?php if(!empty($apchived->teams))
+													<?php $team = getteam($apchived->id); ?>
+													<?php if(!empty($team))
 													 { ?>
 													<div class="img-wrap">
+														<?php foreach($team as $t)
+														{ ?>
 														<div class="img-box" style="background-image: url(<?php echo base_url(); ?>assets/images/img3.jpg);"></div>
-														<div class="img-box" style="background-image: url(<?php echo base_url(); ?>assets/images/img4.jpg);"></div>
+
+													<?php } ?>
 													</div>
 												<?php } ?>
 												</td>

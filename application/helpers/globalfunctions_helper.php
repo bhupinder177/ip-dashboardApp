@@ -145,6 +145,27 @@ function getrowone($table,$whr)
      return $ci->pagination->create_links();
  }
 
+ function getteam($whr)
+  {
+    $ci = & get_instance();
+    $ci->db->select('*');
+    $ci->db->from('quick_assign as q');
+    $ci->db->join('users as u','u.userId = q.userId');
+    $ci->db->where('quickId',$whr);
+    $output = $ci->db->get();
+    $output = $output->result();
+    return $output;
+  }
+
+  function count_all_results($tbl,$whr)
+  {
+    $ci = & get_instance();
+    $ci->db->where($whr);
+    $ci->db->from($tbl);
+    $count = $ci->db->count_all_results();
+    return  $count;
+  }
+
 
 
 ?>

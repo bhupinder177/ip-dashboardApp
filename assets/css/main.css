@@ -2848,7 +2848,7 @@ a:hover {
 }
 
 .btn-action-holder .btn-hold:last-child {
-	width: 15%;
+    width: 32%;
 }
 
 .btn-action-holder .btn {
@@ -3961,4 +3961,3 @@ input:checked ~ .txt-on-off .off {
 		height: 200px;
 	}
 }
-

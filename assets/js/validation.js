@@ -211,6 +211,47 @@ submitHandler: function (form)
 
 // quick submit
 
+// quicksubmit
+$("#ideadetailsubmitform").validate({
+  errorClass: "has-error",
+highlight: function(element, errorClass) {
+    //$(element).parents('.form-group').addClass(errorClass);
+},
+unhighlight: function(element, errorClass, validClass) {
+  //  $(element).parents('.form-group').removeClass(errorClass);
+},
+rules:
+{
+ idea: {
+   required: true
+ },
+ thining: {
+   required: true,
+ },
+ "userId[]": {
+   required: true,
+ },
+},
+messages:
+{
+ idea: {
+   required: "This is required",
+ },
+ thinking: {
+   required: "This is required",
+ },
+ "userId[]": {
+   required: "Please select atlest one ",
+ },
+},
+submitHandler: function (form)
+{
+ formSubmit(form);
+}
+});
+
+// quick submit
+
  ////admin action
 
  $("#actionform").validate({
